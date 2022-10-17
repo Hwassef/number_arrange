@@ -4,7 +4,7 @@ class AppPaddings {
   /// Private constructor
   AppPaddings._();
   static const double smallPaddingValue = 6.0;
-  static const double normalPaddingValue = 12.0;
+  static const double normalPaddingValue = 8.0;
   static const double regularPaddingValue = 16.0;
   static const double largePadding = 22.0;
   static const EdgeInsets horizontalRegularPaddingValue = EdgeInsets.symmetric(horizontal: regularPaddingValue);
