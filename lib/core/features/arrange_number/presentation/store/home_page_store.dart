@@ -14,14 +14,14 @@ abstract class _HomePageStore with Store {
   ObservableList<String> arrangedEmployeeIDs = ObservableList<String>();
   @computed
   bool get isAddEmployeeButtonEnabled =>
-      employeeID != null && employeeID!.isNotEmpty && RegExp(AppRegExp.isValidEmployeeID).hasMatch(employeeID!);
+      employeeID != null && RegExp(AppRegExp.isValidEmployeeID).hasMatch(employeeID!);
   @computed
   bool get isArrangeNumbersButtonEnabled => employeeIDs.length >= 2;
   @action
   void employeeIDOnChanged(String value) => employeeID = value;
   @action
   String? employeeIdentificatorValidator() {
-    if (employeeID != null && employeeID!.isNotEmpty) {
+    if (employeeID != null) {
       if (!RegExp(AppRegExp.isValidEmployeeID).hasMatch(employeeID ?? '')) {
         return "Format not respected";
       } else {
@@ -43,18 +43,20 @@ abstract class _HomePageStore with Store {
             b[0].toString(),
           ),
     );
-    for (int i = 1; i < arrangedEmployeeIDs.length; i++) {
-      int currentItemFirstLetterAscii = arrangedEmployeeIDs[i].codeUnitAt(0);
-      int itemFirstLetterCodeAsciiToCompareWith = arrangedEmployeeIDs[i - 1].codeUnitAt(0);
-      if (itemFirstLetterCodeAsciiToCompareWith == currentItemFirstLetterAscii) {
-        employeesListWithSameFirstLetterCodeAscii.addAll([arrangedEmployeeIDs[i - 1], arrangedEmployeeIDs[i]]);
-        arrangeEmployeeIDsByLastLetter();
-        arrangedEmployeeIDs.removeAt(i);
-        arrangedEmployeeIDs.removeAt(i - 1);
-        arrangedEmployeeIDs.insertAll(i - 1, employeesListWithSameFirstLetterCodeAscii);
-        employeesListWithSameFirstLetterCodeAscii.clear();
+    for (int j = 1; j < arrangedEmployeeIDs.length; j++) {
+      for (int i = 1; i < arrangedEmployeeIDs.length; i++) {
+        int currentItemFirstLetterAscii = arrangedEmployeeIDs[i].codeUnitAt(0);
+        int itemFirstLetterCodeAsciiToCompareWith = arrangedEmployeeIDs[i - 1].codeUnitAt(0);
+        if (itemFirstLetterCodeAsciiToCompareWith == currentItemFirstLetterAscii) {
+          employeesListWithSameFirstLetterCodeAscii.addAll([arrangedEmployeeIDs[i - 1], arrangedEmployeeIDs[i]]);
+          arrangeEmployeeIDsByLastLetter();
+          arrangedEmployeeIDs.removeAt(i);
+          arrangedEmployeeIDs.removeAt(i - 1);
+          arrangedEmployeeIDs.insertAll(i - 1, employeesListWithSameFirstLetterCodeAscii);
+          employeesListWithSameFirstLetterCodeAscii.clear();
 
-        continue;
+          continue;
+        }
       }
     }
   }
