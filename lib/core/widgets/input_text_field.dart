@@ -31,6 +31,7 @@ class InputTextField extends StatelessWidget {
           focusNode: focusNode,
           onChanged: onChanged,
           validator: validator,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
             hintText: hintText,
           ),
