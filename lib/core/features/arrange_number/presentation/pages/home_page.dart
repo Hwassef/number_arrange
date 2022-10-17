@@ -4,14 +4,20 @@ import 'package:number_arrange/config/config.dart';
 import 'package:number_arrange/core/features/arrange_number/presentation/store/home_page_store.dart';
 import 'package:number_arrange/core/widgets/input_text_field.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+final HomePageStore homePageStore = HomePageStore();
+final TextEditingController controller = TextEditingController();
+final FocusNode focusNode = FocusNode();
+
+class _HomePageState extends State<HomePage> {
+  @override
   Widget build(BuildContext context) {
-    final HomePageStore homePageStore = HomePageStore();
-    final TextEditingController controller = TextEditingController();
-    final FocusNode focusNode = FocusNode();
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -19,31 +25,27 @@ class HomePage extends StatelessWidget {
           padding: AppPaddings.horizontalRegularPaddingValue,
           child: Column(
             children: [
-              Observer(
-                builder: (_) => InputTextField(
-                  onChanged: (value) => homePageStore.employeeIDOnChanged(controller.text),
-                  validator: (value) => homePageStore.employeeIdentificatorValidator(),
-                  hintText: 'Employee ID',
-                  labelText: 'Employee ID',
-                  focusNode: focusNode,
-                  controller: controller,
-                ),
+              InputTextField(
+                onChanged: (value) => homePageStore.employeeIDOnChanged(value),
+                validator: (value) => homePageStore.employeeIdentificatorValidator(),
+                hintText: 'Employee ID',
+                labelText: 'Employee ID',
+                focusNode: focusNode,
+                controller: controller,
               ),
               Padding(
                 padding: AppPaddings.largePadding,
                 child: Observer(
                   builder: (_) => ElevatedButton(
                     onPressed: homePageStore.isAddEmployeeButtonEnabled
-                        ? () {
-                            homePageStore.addEmployeeId(employeeID: controller.text);
-                          }
+                        ? () => homePageStore.addEmployeeId(employeeID: homePageStore.employeeID ?? '')
                         : null,
                     child: const Text("Add"),
                   ),
                 ),
               ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.4,
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.35,
                 child: Row(
                   children: [
                     Expanded(
